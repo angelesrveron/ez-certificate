@@ -1,0 +1,67 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css">
+
+<style>
+  body {
+    padding: 2em;
+  }
+
+  input {
+    width: 100%;
+    margin-bottom: 1em;
+  }
+</style>
+
+<h2>Conectar Google Sheets</h2>
+
+ <!--para que el usuario pegue el link directo al Google Sheet-->
+<label for="sheetLink">URL del Google Sheets </label>
+<input class="input__field" type="text" id="sheetLink" placeholder="Pega aquí tu link de Google Sheets (público)">
+
+ <!--para que el usuario escriba el nombre de la hoja de cálculo que quiere leer-->
+<label for="sheetName">Nombre de la hoja</label>
+<input class="input__field" type="text" id="sheetName" placeholder="Por ejemplo: Estudiantes">
+
+ <!--carga los datos del plugin-->
+<button class="button button--primary" id="cargarDatos">Cargar datos</button>
+
+<script>
+  document.getElementById('cargarDatos').onclick = () => {
+    //se toman los valores que el usuario escribió en los dos inputs (el link de la hoja y el nombre de la hoja)
+    //trim() ; sacar espacios en blanco
+    const link = document.getElementById('sheetLink').value.trim();
+    const sheetName = document.getElementById('sheetName').value.trim();
+
+    //para extraer el ID de la hoja desde el enlace de Google Sheets 
+    const match = link.match(/\/d\/([a-zA-Z0-9-_]+)/);
+
+    //Si no se puede extraer el ID, o el usuario no escribió el nombre de la hoja se muestra una alerta
+    if (!match || !sheetName) {
+      alert('Verifica que el link y el nombre de la hoja sean correctos.');
+      return;
+    }
+
+    // crea la URL para hacer el fetch() a opensheet usando el ID y nombre de hoja.
+    const sheetId = match[1];
+    const apiUrl = `https://opensheet.elk.sh/${sheetId}/${sheetName}`;
+
+    // petición HTTP para obtener los datos en formato JSON desde esa URL.
+    fetch(apiUrl)
+      .then(res => res.json())
+
+      //verifica que se obtuvieron datos y que es un array 
+      .then(data => {
+        if (!Array.isArray(data) || data.length === 0) {
+          alert("No se encontraron datos.");
+          return;
+        }
+
+        const fila = data[0]; // toma la primer fila de la hoja
+        parent.postMessage({ pluginMessage: fila }, '*'); //envía esa fila al archivo code.ts como msj
+      }) 
+      //si falla muestra una alerta
+      .catch(err => {
+        console.error(err);
+        alert("Error al cargar los datos. Asegúrate de que el Sheet sea público y el nombre de hoja esté bien escrito.");
+      });
+  };
+</script>
