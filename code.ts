@@ -1,35 +1,35 @@
-figma.showUI(__html__); //Mostrar en pantalla el plugin en Figma
+figma.showUI(__html__);
+figma.ui.resize(500, 500);
 
-figma.ui.resize(500,500); //Tamaño del modelo ui en pantalla(width, height)
- figma.loadAllPagesAsync();
+figma.ui.onmessage = async (pluginMessage) => {
+  await figma.loadFontAsync({ family: "Rubik", style: "Regular" });
 
+  const data = pluginMessage; // fila del sheet (clave: valor)
+  const nodes: SceneNode[] = [];
 
-figma.notify("hola!");
+  // Buscar todos los nodos de texto en la página actual
+  const textNodes = figma.currentPage.findAll(node => node.type === "TEXT") as TextNode[];
 
-figma.ui.onmessage = async  (pluginMessage) => { //recibe el mensaje que mandamos en ui.html
+  for (const node of textNodes) {
+    // Solo procesar nodos cuyo nombre comience con '#'
+    if (node.name.startsWith("#")) {
+      const key = node.name.slice(1); // quitar el '#' → queda "NOMBRE"
+      const value = data[key];
 
-await figma.loadFontAsync({ family: "Rubik", style: "Regular"});
+      if (value !== undefined) {
+        await figma.loadFontAsync(node.fontName as FontName);
+        node.characters = value;
+        nodes.push(node);
+      }
+    }
+  }
 
-const nodes:SceneNode[] = []; //para que funcione el scroll and zoom pq espera un array
+  if (nodes.length === 0) {
+    figma.notify("No se encontró ningún texto con nombre '#CAMPO'.");
+  } else {
+    figma.viewport.scrollAndZoomIntoView(nodes);
+    figma.notify("Datos cargados con éxito.");
+  }
 
- const postComponentSet = figma.root.findOne(node => node.type == "COMPONENT_SET" && node.name == "post") as ComponentSetNode  ;
- const defaultVariant = postComponentSet.defaultVariant as ComponentNode;
- 
- const newPost = defaultVariant.createInstance();
-
- const templateNombreEstudiante = newPost.findOne(node => node.name == "@username" && node.type == "TEXT") as TextNode;
- const templateApellidoEstudiante = newPost.findOne(node => node.name == "displayName" && node.type == "TEXT") as TextNode;
- const templateDescription = newPost.findOne(node => node.name == "description" && node.type == "TEXT") as TextNode;
-
- templateNombreEstudiante.characters = pluginMessage.nombreEstudiante;
- templateApellidoEstudiante.characters = pluginMessage.apellidoEstudiante;
- templateDescription.characters = pluginMessage.description;
-
- //buscamos el nodo por el nombre y por el tipo que es "text"
-
-figma.viewport.scrollAndZoomIntoView(nodes);
-
-figma.closePlugin(); //Una vez que  mandamos la info cerrar la ventana del plugin ...
-
-
-}
+  figma.closePlugin();
+};

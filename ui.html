@@ -12,7 +12,31 @@
 </style>
 
 <h2>Conectar Google Sheets</h2>
+<!-- Botón para abrir la guía -->
+<button class="button button--secondary" id="mostrarGuia" style="margin-bottom: 1em;">
+ ℹ️INFO
+</button>
 
+<!-- Ventana modal oculta -->
+<div id="guiaModal" style="display: none; position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
+  background: white; border: 1px solid #ccc; border-radius: 8px; padding: 1em; width: 80%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.2); z-index: 9999;">
+
+  <strong>📝 ¿Cómo vincular tu diseño?</strong>
+  <ul style="padding-left: 1.2em;">
+    <li>La primera fila del Google Sheet debe tener los nombres de los campos (como <code>NOMBRE</code>, <code>ROL</code>, etc.).</li>
+    <li>En Figma, nombrá tus capas de texto usando <strong>#</strong> seguido del nombre del campo.</li>
+    <li>Ejemplos:
+      <ul>
+        <li><code>#NOMBRE</code></li>
+        <li><code>#ROL</code></li>
+        <li><code>#FECHA</code></li>
+      </ul>
+    </li>
+    <li>El plugin reemplazará el contenido de esas capas con los datos del Sheet.</li>
+  </ul>
+
+  <button class="button button--secondary" id="cerrarGuia" style="margin-top: 1em;">Cerrar</button>
+</div>
  <!--para que el usuario pegue el link directo al Google Sheet-->
 <label for="sheetLink">URL del Google Sheets </label>
 <input class="input__field" type="text" id="sheetLink" placeholder="Pega aquí tu link de Google Sheets (público)">
@@ -63,5 +87,14 @@
         console.error(err);
         alert("Error al cargar los datos. Asegúrate de que el Sheet sea público y el nombre de hoja esté bien escrito.");
       });
+  };
+
+   document.getElementById("mostrarGuia").onclick = () => {
+    document.getElementById("guiaModal").style.display = "block";
+  };
+
+  // Cerrar la guía
+  document.getElementById("cerrarGuia").onclick = () => {
+    document.getElementById("guiaModal").style.display = "none";
   };
 </script>
