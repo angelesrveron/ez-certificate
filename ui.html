@@ -7,7 +7,8 @@
     padding: 2em;
     max-width: 400px;
     margin: 0 auto;
-    background-color: #f9f9f9;
+    background-color: #ffff;
+    overflow-x: hidden;
   }
 
   .section {
@@ -17,6 +18,16 @@
   .input {
     width: 100%;
     margin-top: 0.25em;
+  }
+
+  .input-custom {
+    height: 2em;
+    border-radius: 0.5em;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    padding: 0 0.75em;
+    display: flex;
+    align-items: center;
   }
 
   .label {
@@ -42,7 +53,7 @@
     background: white;
     padding: 1.5em;
     border-radius: 12px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.25);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
     width: 90%;
     max-width: 420px;
     position: fixed;
@@ -56,19 +67,13 @@
     margin-top: 0;
   }
 
-  .info-button {
-    margin-left: 0.5em;
-    padding: 0 0.5em;
-  }
-
   .code {
     background: #f3f3f3;
     padding: 2px 6px;
     border-radius: 4px;
     font-family: monospace;
-
-  
   }
+
   .btn-verde {
     background-color: #28a745;
     color: white;
@@ -80,10 +85,25 @@
     cursor: pointer;
     transition: background-color 0.2s;
   }
+.btn-amarillo {
+    background-color: #dfd006;
+    color: white;
+    border: none;
+    padding: 0.6em 1.2em;
+    border-radius: 0.5em;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
 
+  .btn-amarillo:hover {
+    background-color: #c2bf18;
+  }
   .btn-verde:hover {
     background-color: #218838;
   }
+
   .btn-celeste {
     background-color: #17b4cc;
     color: white;
@@ -101,51 +121,66 @@
   }
 </style>
 
-<h2 style="margin-bottom: 1em; ">📄Generador de Certificados Masivos</h2>
+<header>
+  <h2 style="margin-bottom: 1em;">Generador Masivo de Certificados</h2>
+</header>
 
 <div class="section">
-  <label class="label" style="margin-bottom: 0.5em; color: #333; font-weight: 500;" for="sheetLink">🔗 Enlace público de Google Sheets</label>
-  <input class="input input--text"  type="text" style="height: 2em; border-radius: 0.5em;border: 1px solid #ccc; font-size: 12px; padding: 0 0.75em; display: flex; align-items: center;" id="sheetLink" placeholder="https://docs.google.com/spreadsheets/..." />
+  <label class="label" for="sheetLink">🔗 Enlace público de Google Sheets</label>
+  <input class="input input--text input-custom" type="text" id="sheetLink" placeholder="https://docs.google.com/spreadsheets/..." />
 </div>
 
 <div class="section">
-  <label class="label" style="margin-bottom: 0.5em; color: #333; font-weight: 500;" for="sheetName">📄 Nombre de la hoja</label>
-  <input class="input input--text" type="text" style="height: 2em; border-radius: 0.5em;border: 1px solid #ccc; font-size: 12px; padding: 0 0.75em; display: flex; align-items: center;"  id="sheetName" placeholder="Ej: Estudiantes" />
+  <label class="label" for="sheetName">📄 Nombre de la hoja</label>
+  <input class="input input--text input-custom" type="text" id="sheetName" placeholder="Ej: Estudiantes" />
 </div>
 
-<div class="section" style="display: flex; justify-content: start; gap: 0.5em;">
-  <button class="btn-verde" id="generarBtn">🚀Generar</button>
-  <button class="btn-celeste" id="mostrarGuia">ℹ️ Info</button>
+<div class="section">
+  <label class="label" for="mostrarDni" style="color: black;">
+    <input type="checkbox" id="mostrarDni" style=" margin-right: 0.5em;" />
+    Mostrar DNI en los certificados
+  </label>
+</div>
+
+<div class="section" style="display: flex; justify-content: start; gap: 0.5em; margin-top: 1em;">
+  <button class="btn-verde" id="generarBtn">Generar</button>
+  <button class="btn-amarillo" id="previewBtn">👁️</button>
+  <button class="btn-celeste" id="mostrarGuia">Info</button>
 </div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h3>📝 ¿Cómo vincular tu diseño?</h3>
-    <ul style="font-size: 14px; line-height: 1.6;">
-      <li>La primera fila del Sheet debe tener los nombres de los campos como: <span class="code">NOMBRE</span>, <span class="code">CURSO</span>, <span class="code">FECHA</span>.</li>
-      <li>En Figma, nombra las <strong>capas de texto</strong> igual, pero con <span class="code">#</span>: <span class="code">#NOMBRE</span>, <span class="code">#CURSO</span>.</li>
-      <li>El plugin reemplaza esos textos con los datos del Sheet.</li>
-      <li style="color: red;">❗ No uses "ñ" ni acentos en los nombres de campos.</li>
+    <ul style="font-size: 12px; line-height: 1.6;">
+      <li>La primera fila del Sheet debe tener los nombres de los campos como: <span class="code">NOMBRE</span>, <span class="code">CURSO</span>, <span class="code">FECHA</span>, etc.</li>
+      <li>En Figma, nombrá las <strong>capas de texto</strong> igual, pero anteponiendo un <span class="code">#</span>: por ejemplo <span class="code">#NOMBRE</span>, <span class="code">#CURSO</span>.</li>
+      <li>El diseño base del certificado debe estar dentro de un <strong>Frame</strong> o <strong>Componente</strong>.</li>
+      <li><strong>Seleccioná</strong> ese Frame o Componente antes de presionar "Generar" o "Vista previa". El plugin va a duplicar esa selección con los datos del Sheet.</li>
+      <li style="color: red;">❗ No uses "ñ", tildes ni espacios en los nombres de los campos.</li>
     </ul>
     <button class="button button--secondary" id="cerrarGuia" style="margin-top: 1em;">Cerrar</button>
   </div>
 </div>
 
 <script>
-  document.getElementById("generarBtn").onclick = () => {
+  function enviarDatos(preview) {
     const link = document.getElementById("sheetLink").value.trim();
     const sheetName = document.getElementById("sheetName").value.trim();
+    const mostrarDni = document.getElementById("mostrarDni").checked;
 
     const match = link.match(/\/d\/([a-zA-Z0-9-_]+)/);
     if (!match || !sheetName) {
-      alert("Verifica que el link y el nombre de la hoja sean correctos.");
+      parent.postMessage({ pluginMessage: { error: "Verifica que el link y el nombre de la hoja sean correctos." } }, "*");
       return;
     }
 
     const sheetId = match[1];
-    parent.postMessage({ pluginMessage: { sheetId, sheetName } }, "*");
-  };
+    parent.postMessage({ pluginMessage: { sheetId, sheetName, mostrarDni, preview } }, "*");
+  }
+
+  document.getElementById("generarBtn").onclick = () => enviarDatos(false);
+  document.getElementById("previewBtn").onclick = () => enviarDatos(true);
 
   const modalOverlay = document.getElementById("modalOverlay");
   document.getElementById("mostrarGuia").onclick = () => {
