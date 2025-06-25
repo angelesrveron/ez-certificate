@@ -6,7 +6,7 @@
     padding: 2em;
     max-width: 400px;
     margin: 0 auto;
-    background-color: #ffff;
+    background-color: #ffffff;
     overflow-x: hidden;
   }
 
@@ -34,6 +34,7 @@
     font-weight: 500;
     margin-bottom: 0.25em;
     display: block;
+    color: #747474;
   }
 
   .modal-overlay {
@@ -80,24 +81,24 @@
     padding: 0.6em 1.2em;
     border-radius: 0.5em;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     transition: background-color 0.2s;
   }
 .btn-amarillo {
-    background-color: #dfd006;
+    background-color: #8a949c;
     color: white;
     border: none;
     padding: 0.6em 1.2em;
     border-radius: 0.5em;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     transition: background-color 0.2s;
   }
 
   .btn-amarillo:hover {
-    background-color: #c2bf18;
+    background-color: #3e4347;
   }
   .btn-verde:hover {
     background-color: #218838;
@@ -110,7 +111,7 @@
     padding: 0.6em 1.2em;
     border-radius: 0.5em;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     transition: background-color 0.2s;
   }
@@ -137,13 +138,13 @@
 <div class="section">
   <label class="label" for="mostrarDni" style="color: black;">
     <input type="checkbox" id="mostrarDni" style=" margin-right: 0.5em;" />
-    Mostrar DNI en los certificados
+    Mostrar DNI en los certificados (si estan)
   </label>
 </div>
 
-<div class="section" style="display: flex; justify-content: start; gap: 0.5em; margin-top: 1em;">
+<div class="section" style="display: flex; justify-content: start; gap: 0.5em; ">
   <button class="btn-verde" id="generarBtn">Generar</button>
-  <button class="btn-amarillo" id="previewBtn">👁️</button>
+  <button class="btn-amarillo" id="previewBtn">Vista previa</button>
   <button class="btn-celeste" id="mostrarGuia">Info</button>
 </div>
 
