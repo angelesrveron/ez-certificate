@@ -2,6 +2,11 @@
 ![Slide 16_9 - 1](https://github.com/user-attachments/assets/616184ce-1cd5-445e-8efa-9b6746d37f0e)
 
 <h1>Plugin: Bulk Certificate Generator for Figma </h1>
+
+<b>Plugin link:</b> https://www.figma.com/community/plugin/1504613755606147331/bulk-certificate-generator-generador-masivo-de-certificados
+
+<br> 
+
 This plugin was created as part of a practical assignment for the Multimedia Technology degree at Universidad Maimónides, within the course Multimedia Programming IV.
 
 <br>
